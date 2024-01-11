@@ -49,15 +49,20 @@ export const errorHandler = async (
     }
 }
 
+type ErrorWithContext = {
+    context?: Record<string, unknown>
+} & Error
+
 export const enrichErrorContext = ({ error, key, value }: EnrichErrorContextParams): unknown => {
     if (!ENRICH_ERROR_CONTEXT) {
         return error
     }
 
     if (error instanceof Error) {
-        if ('context' in error && error.context instanceof Object) {
-            const enrichedError = Object.assign(error, {
-                ...error.context,
+        const errorWithCtx = error as ErrorWithContext
+        if ('context' in errorWithCtx && errorWithCtx.context instanceof Object) {
+            const enrichedError = Object.assign(errorWithCtx, {
+                ...errorWithCtx.context,
                 [key]: value,
             })
 

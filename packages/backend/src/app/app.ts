@@ -162,6 +162,7 @@ export const setupApp = async (): Promise<FastifyInstance> => {
                 We suggest turning around and trying another path. Good luck!
             `)
         }
+        return
     })
 
     app.addHook('preHandler', securityHandlerChain)
